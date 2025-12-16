@@ -1,0 +1,156 @@
+// This is your Prisma schema file,
+
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  THERAPIST
+  ADMIN
+  CLIENT
+}
+
+enum AssignmentStatus {
+  DRAFT
+  SENT
+  COMPLETED
+}
+
+enum TemplateStatus {
+  PRIVATE
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  role          UserRole  @default(THERAPIST)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Therapist relationships
+  clients       Client[]
+  sessions      Session[]
+  assignments   Assignment[]
+  templates     Template[]
+  emailLogs     EmailLog[]
+  
+  @@map("users")
+}
+
+model Client {
+  id            String    @id @default(cuid())
+  name          String
+  email         String
+  age           Int?
+  gender        String?
+  condition     String?
+  therapyGoals  String?
+  therapistId   String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  therapist     User      @relation(fields: [therapistId], references: [id], onDelete: Cascade)
+  sessions      Session[]
+  assignments   Assignment[]
+  
+  @@map("clients")
+}
+
+model Session {
+  id            String    @id @default(cuid())
+  sessionNumber Int
+  summary       String?
+  focusArea     String?
+  therapistId   String
+  clientId      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  therapist     User        @relation(fields: [therapistId], references: [id], onDelete: Cascade)
+  client        Client      @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  assignments   Assignment[]
+  
+  @@unique([therapistId, clientId, sessionNumber])
+  @@map("sessions")
+}
+
+model Assignment {
+  id                  String            @id @default(cuid())
+  title               String
+  taskDescription     String
+  learningObjectives  String
+  reflectionPrompts   String
+  estimatedTime       Int?              // in minutes
+  difficultyLevel     String?
+  customFields        Json?             // For optional custom fields
+  status              AssignmentStatus  @default(DRAFT)
+  version             Int               @default(1)
+  parentAssignmentId  String?           // For versioning/cloning
+  therapistId         String
+  clientId            String
+  sessionId           String
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  sentAt              DateTime?
+  
+  therapist           User              @relation(fields: [therapistId], references: [id], onDelete: Cascade)
+  client              Client            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  session             Session           @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  emailLogs           EmailLog[]
+  parentAssignment    Assignment?       @relation("AssignmentVersions", fields: [parentAssignmentId], references: [id])
+  childAssignments    Assignment[]      @relation("AssignmentVersions")
+  
+  @@map("assignments")
+}
+
+model Template {
+  id                  String          @id @default(cuid())
+  title               String
+  taskDescription     String
+  learningObjectives  String
+  reflectionPrompts   String
+  estimatedTime       Int?
+  difficultyLevel     String?
+  customFields        Json?
+  tags Json? // changed from String[] to Json for SQLite compatibility
+  status              TemplateStatus  @default(PRIVATE)
+  therapistId         String
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+  approvedAt          DateTime?
+  approvedBy          String?         // Admin user ID
+  
+  therapist           User            @relation(fields: [therapistId], references: [id], onDelete: Cascade)
+  
+  @@map("templates")
+}
+
+model EmailLog {
+  id            String      @id @default(cuid())
+  assignmentId String
+  therapistId   String
+  clientEmail   String
+  subject       String
+  status        String      // sent, delivered, failed, etc.
+  messageId     String?     // From email service
+  errorMessage  String?
+  sentAt        DateTime    @default(now())
+  
+  assignment    Assignment  @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  therapist     User        @relation(fields: [therapistId], references: [id], onDelete: Cascade)
+  
+  @@map("email_logs")
+}
+
