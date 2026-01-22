@@ -1,174 +1,107 @@
-# AI Assignment Generator - Therapy Management System
+# 🧠 AI Assignment Generator – Therapy Management System
 
-A comprehensive Next.js application for therapists to generate, manage, and send AI-powered therapy assignments to clients.
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js"/>
+  <img src="https://img.shields.io/badge/TypeScript-Strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-Database-336791?style=for-the-badge&logo=postgresql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma"/>
+</p>
 
-## Features
+<p align="center">
+  <img src="https://img.shields.io/badge/AI-OpenAI%20GPT--4-8A2BE2?style=for-the-badge&logo=openai&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Auth-NextAuth.js-success?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Email-SendGrid-00B3E3?style=for-the-badge&logo=sendgrid&logoColor=white"/>
+</p>
 
-### Version 1 (Current)
-- **AI Assignment Generator**: Generate personalized CBT assignments using OpenAI
-- **Assignment Editor**: WYSIWYG editor for customizing generated assignments
-- **Client & Session Management**: Link assignments to specific clients and therapy sessions
-- **Email Integration**: Send assignments directly to clients via SendGrid
-- **Public Library**: Community-contributed assignment templates with filtering
-- **Admin Moderation**: Admin dashboard for approving/rejecting public templates
-- **Role-Based Access**: Therapist, Admin, and Client (v2) roles
+<p align="center">
+  <img src="https://img.shields.io/badge/Status-Production%20Ready-brightgreen?style=flat-square"/>
+  <img src="https://img.shields.io/badge/License-MIT-blue?style=flat-square"/>
+  <img src="https://img.shields.io/badge/Maintained-Yes-brightgreen?style=flat-square"/>
+</p>
 
-### Version 2 (Planned)
-- Client portal for viewing and submitting assignments
-- Mobile-responsive design
-- Assignment completion tracking
-- Analytics and reporting
+---
 
-## Tech Stack
+## 🧩 Overview
 
-- **Framework**: Next.js 14 (App Router)
-- **Language**: TypeScript
-- **Database**: PostgreSQL with Prisma ORM
-- **Authentication**: NextAuth.js
-- **Styling**: Tailwind CSS
-- **Editor**: TipTap (WYSIWYG)
-- **AI**: OpenAI GPT-4
-- **Email**: SendGrid
+**AI Assignment Generator** is a **therapy management system** built for **mental health professionals** to generate, manage, and deliver **AI-powered CBT therapy assignments**.
 
-## Getting Started
+The platform combines **AI intelligence**, **secure role-based access**, and **modern web architecture** to streamline therapist workflows and improve client outcomes.
 
-### Prerequisites
+---
 
-- Node.js 18+ 
-- PostgreSQL database
-- OpenAI API key
-- SendGrid API key (optional, for email sending)
+## ✨ Features
 
-### Installation
+### ✅ Version 1 (Current)
 
-1. Clone the repository:
+🤖 **AI Assignment Generator**  
+Generate personalized CBT assignments using OpenAI  
+
+📝 **Assignment Editor**  
+WYSIWYG editor (TipTap) for full customization  
+
+👥 **Client & Session Management**  
+Link assignments to clients and therapy sessions  
+
+📧 **Email Integration**  
+Send assignments directly via SendGrid  
+
+📚 **Public Assignment Library**  
+Community templates with category-based filtering  
+
+🛡️ **Admin Moderation Panel**  
+Approve or reject public templates  
+
+🔐 **Role-Based Access Control**  
+Therapist & Admin roles implemented  
+
+---
+
+### 🚀 Version 2 (Planned)
+
+- Client portal for viewing & submitting assignments  
+- Assignment completion tracking  
+- Analytics & therapist insights dashboard  
+- Fully mobile-responsive UI  
+
+---
+
+## 🛠️ Tech Stack
+
+### 🌐 Frontend
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- TipTap Editor
+
+### 🧠 Backend
+- Node.js
+- Prisma ORM
+- PostgreSQL
+
+### 🔐 Authentication
+- NextAuth.js
+
+### 🤖 AI
+- OpenAI GPT-4
+
+### 📧 Email
+- SendGrid
+
+---
+
+## ⚙️ Getting Started
+
+### 🔑 Prerequisites
+- Node.js 18+
+- PostgreSQL
+- OpenAI API Key
+- SendGrid API Key (optional)
+
+---
+
+### 📦 Installation
+
 ```bash
 git clone <repository-url>
 cd Ai-generator-react
-```
-
-2. Install dependencies:
-```bash
 npm install
-```
-
-3. Set up environment variables:
-```bash
-cp .env.example .env
-```
-
-Edit `.env` and add your configuration:
-- `DATABASE_URL`: PostgreSQL connection string
-- `NEXTAUTH_SECRET`: Generate a random secret (e.g., `openssl rand -base64 32`)
-- `OPENAI_API_KEY`: Your OpenAI API key
-- `SENDGRID_API_KEY`: Your SendGrid API key (optional)
-- `SENDGRID_FROM_EMAIL`: Sender email address
-
-4. Set up the database:
-```bash
-npx prisma generate
-npx prisma db push
-```
-
-5. Create an admin user:
-```bash
-node scripts/create-admin.js admin@example.com admin123 "Admin User"
-```
-
-Or use default values:
-```bash
-node scripts/create-admin.js
-```
-
-6. Run the development server:
-```bash
-npm run dev
-```
-
-7. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Project Structure
-
-```
-├── app/
-│   ├── api/              # API routes
-│   ├── dashboard/        # Dashboard pages
-│   ├── login/            # Login page
-│   └── layout.tsx        # Root layout
-├── components/           # React components
-│   ├── assignments/      # Assignment-related components
-│   ├── clients/          # Client management components
-│   ├── library/          # Public library components
-│   ├── admin/            # Admin dashboard components
-│   └── layout/           # Layout components
-├── lib/                  # Utility libraries
-│   ├── auth.ts           # NextAuth configuration
-│   ├── prisma.ts         # Prisma client
-│   ├── ai.ts             # OpenAI integration
-│   └── email.ts          # SendGrid integration
-├── prisma/
-│   └── schema.prisma     # Database schema
-└── types/                # TypeScript type definitions
-```
-
-## User Roles
-
-### Therapist
-- Generate AI assignments
-- Edit and customize assignments
-- Manage clients and sessions
-- Send assignments via email
-- Save private templates
-- Publish templates to public library
-
-### Admin
-- All therapist permissions
-- Approve/reject public templates
-- View system statistics
-- Manage all accounts
-
-### Client (v2)
-- Receive assignments via email (v1)
-- View assignments in portal (v2)
-- Submit completed assignments (v2)
-
-## API Routes
-
-- `POST /api/assignments/generate` - Generate AI assignment
-- `GET /api/assignments` - List assignments
-- `GET /api/assignments/[id]` - Get assignment details
-- `PUT /api/assignments/[id]` - Update assignment
-- `POST /api/assignments/[id]/send` - Send assignment via email
-- `POST /api/assignments/[id]/clone` - Clone assignment
-- `GET /api/clients` - List clients
-- `POST /api/clients` - Create client
-- `GET /api/sessions` - List sessions
-- `POST /api/sessions` - Create session
-- `GET /api/templates` - List templates
-- `POST /api/templates` - Create template
-- `PUT /api/templates/[id]` - Update template status
-
-## Database Schema
-
-- **User**: Therapists, admins, and clients
-- **Client**: Client profiles with therapy information
-- **Session**: Therapy sessions linked to clients
-- **Assignment**: Generated assignments linked to clients and sessions
-- **Template**: Reusable assignment templates (private/public)
-- **EmailLog**: Email delivery tracking
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
-
-## License
-
-MIT License
-
-## Support
-
-For issues and questions, please open an issue on GitHub.
-
